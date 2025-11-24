@@ -8,6 +8,7 @@ import Journal from "./pages/Journal";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ProtectedRoute from "./components/ProtectedRoute"
+import CapsuleView from "./pages/CapsuleView";
 
 
 function App() {
@@ -18,6 +19,15 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route
+  path="/capsule/:id"
+  element={
+    <ProtectedRoute>
+      <CapsuleView />
+    </ProtectedRoute>
+  }
+/>
+
         <Route path="/create-capsule" element={
     <ProtectedRoute>
       <CreateCapsule />

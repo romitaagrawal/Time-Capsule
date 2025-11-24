@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { getMyCapsules, createCapsuleApi } from "../api/capsuleApi";
+import { createCapsule, uploadCapsuleFiles, listCapsules } from "../api/capsuleApi";
 import CapsuleCard from "../components/CapsuleCard";
+import formatDate from "../utils/formatDate";
 
 export default function CreateCapsule() {
-  const name = localStorage.getItem("name");
-
+  const name = localStorage.getItem("name") || "You";
   const [title, setTitle] = useState("");
   const [openDate, setOpenDate] = useState("");
   const [files, setFiles] = useState([]);
   const [capsules, setCapsules] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   async function loadCapsules() {
     try {
-      const data = await getMyCapsules();
-      setCapsules(data);
+      const res = await listCapsules();
+      // ensure dates are ISO strings from backend; leave them as-is
+      setCapsules(res.capsules || []);
     } catch (err) {
-      console.error(err);
+      console.error("loadCapsules error:", err);
     }
   }
 
@@ -25,64 +27,69 @@ export default function CreateCapsule() {
 
   async function handleCreate(e) {
     e.preventDefault();
+    if (!title || !openDate) return alert("Add title and open date");
 
     try {
-      await createCapsuleApi(title, name, openDate, files);
+      setLoading(true);
+
+      // Send open_date as an ISO string (UTC)
+      const payload = {
+        title,
+        creator_name: name,
+        open_date: new Date(openDate).toISOString(),
+        attachments: []
+      };
+
+      const res = await createCapsule(payload);
+      const capsuleId = res.capsule_id;
+
+      if (files && files.length > 0) {
+        // upload files and backend will update capsule doc
+        await uploadCapsuleFiles(capsuleId, files);
+      }
+
+      // reload
+      await loadCapsules();
       setTitle("");
       setOpenDate("");
       setFiles([]);
-
-      // reload capsules after creating new one
-      loadCapsules();
+      setLoading(false);
     } catch (err) {
-      console.error(err);
+      setLoading(false);
+      console.error("create capsule error:", err);
+      alert("Error creating capsule");
     }
   }
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Hello {name}, welcome to TimeCapsule — let's create a capsule</h2>
+    <div style={{ padding: 20 }}>
+      <h2>Hello {name}, welcome — let's create a capsule</h2>
 
-      {/* ------------------- CREATE FORM ------------------- */}
       <form onSubmit={handleCreate}>
-        <input
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        /><br/><br/>
+        <div>
+          <input placeholder="Title" value={title} onChange={(e)=>setTitle(e.target.value)} required style={{width:"100%", padding:8}}/>
+        </div>
 
-        <input
-          type="date"
-          value={openDate}
-          onChange={(e) => setOpenDate(e.target.value)}
-          required
-        /><br/><br/>
+        <div style={{marginTop:8}}>
+          {/* datetime-local gives local time; we convert to ISO when sending */}
+          <input type="datetime-local" value={openDate} onChange={(e)=>setOpenDate(e.target.value)} required />
+        </div>
 
-        <input
-          type="file"
-          multiple
-          onChange={(e) => setFiles(e.target.files)}
-        /><br/><br/>
+        <div style={{marginTop:8}}>
+          <input type="file" multiple onChange={(e)=>setFiles(Array.from(e.target.files))} />
+          {files.length>0 && <div><small>{files.length} file(s) selected</small></div>}
+        </div>
 
-        <button type="submit">Create Capsule</button>
+        <div style={{marginTop:10}}>
+          <button type="submit" disabled={loading}>{loading ? "Creating..." : "Create Capsule"}</button>
+        </div>
       </form>
 
-      <hr style={{ margin: "40px 0" }} />
+      <hr style={{margin:"30px 0"}}/>
 
-      {/* ------------------- CAPSULE LIST ------------------- */}
       <h3>Your Capsules</h3>
-      {capsules.length === 0 && <p>No capsules created yet.</p>}
-
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-        gap: "20px",
-        marginTop: "20px"
-      }}>
-        {capsules.map(cap => (
-          <CapsuleCard key={cap._id} capsule={cap} />
-        ))}
+      <div style={{display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(280px,1fr))", gap:16, marginTop:12}}>
+        {capsules.map(c => <CapsuleCard key={c._id} capsule={c} />)}
       </div>
     </div>
   );

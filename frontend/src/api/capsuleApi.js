@@ -1,39 +1,40 @@
+// frontend/src/api/capsuleApi.js
 import api from "./apiClient";
 
-export async function getMyCapsules() {
+export async function createCapsule(data) {
   const token = localStorage.getItem("token");
-
-  const res = await api.get("/capsules", {
+  const res = await api.post("/capsules/", data, {
     headers: { Authorization: `Bearer ${token}` },
   });
-
-  return res.data.capsules;
+  return res.data;
 }
 
-export async function createCapsuleApi(title, creator_name, open_date, files) {
+export async function uploadCapsuleFiles(capsuleId, files) {
   const token = localStorage.getItem("token");
+  const form = new FormData();
+  for (const file of files) form.append("files", file);
 
-  let attachmentList = [];
-
-  if (files && files.length > 0) {
-    const formData = new FormData();
-    for (let f of files) formData.append("files", f);
-
-    const uploadRes = await api.post("/upload/files", formData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
-      },
-    });
-
-    attachmentList = uploadRes.data.files;
-  }
-
-  const res = await api.post(
-    "/capsules",
-    { title, creator_name, open_date, attachments: attachmentList },
-    { headers: { Authorization: `Bearer ${token}` } }
-  );
-
+  const res = await api.post(`/upload/capsule/${capsuleId}/files`, form, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return res.data;
+}
+
+export async function listCapsules() {
+  const token = localStorage.getItem("token");
+  const res = await api.get("/capsules/", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.data; // { capsules: [...] }
+}
+
+export async function getCapsule(id) {
+  const token = localStorage.getItem("token");
+  const res = await api.get(`/capsules/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.data; // { locked: bool, open_date:..., capsule: {...} }
 }
