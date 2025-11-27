@@ -1,10 +1,15 @@
 # routers/journal_routes.py
 from fastapi import APIRouter, HTTPException, Depends, Header
 from pydantic import BaseModel
-from models.journal_model import create_entry, list_entries, get_entry_by_id, update_entry
+from models.journal_model import JOUR, create_entry, list_entries, get_entry_by_id, update_entry
 from utils.token_utils import decode_access_token
 from datetime import datetime
 from typing import Optional
+from bson import ObjectId
+from models.capsule_model import CAPS, get_capsule_by_id
+import os
+import shutil
+
 
 journal_router = APIRouter()
 
@@ -63,3 +68,23 @@ def update_journal(entry_id: str, req: JournalReq, user_id: str = Depends(get_cu
         raise HTTPException(status_code=403, detail="Forbidden")
     update_entry(entry_id, {"title": req.title, "body": req.body, "attachments": req.attachments or []})
     return {"success": True}
+
+@journal_router.delete("/{entry_id}")
+def delete_journal_entry(entry_id: str, user_id: str = Depends(get_current_user)):
+    entry = get_entry_by_id(entry_id)
+    if not entry:
+        raise HTTPException(status_code=404, detail="Entry not found")
+
+    if entry["owner_id"] != user_id:
+        raise HTTPException(status_code=403, detail="Forbidden")
+
+    # delete DB
+    JOUR.delete_one({"_id": ObjectId(entry_id)})
+
+    # delete folder and all files
+    folder = f"./uploads/journal/{entry_id}"
+    if os.path.exists(folder):
+        import shutil
+        shutil.rmtree(folder)
+
+    return {"success": True, "message": "Entry deleted"}

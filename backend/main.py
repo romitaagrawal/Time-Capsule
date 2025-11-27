@@ -6,6 +6,7 @@ from routers import auth_routes, capsule_routes, journal_routes, upload_routes
 from dotenv import load_dotenv
 from fastapi.staticfiles import StaticFiles
 
+
 load_dotenv()
 
 FRONTEND_ORIGIN = os.getenv("FRONTEND_ORIGIN", "http://localhost:5173")

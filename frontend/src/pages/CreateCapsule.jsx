@@ -88,9 +88,63 @@ export default function CreateCapsule() {
       <hr style={{margin:"30px 0"}}/>
 
       <h3>Your Capsules</h3>
-      <div style={{display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(280px,1fr))", gap:16, marginTop:12}}>
-        {capsules.map(c => <CapsuleCard key={c._id} capsule={c} />)}
-      </div>
+      <div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+    gap: 16,
+    marginTop: 12
+  }}
+>
+  {capsules.map((c) => (
+    <div
+      key={c._id}
+      style={{
+        border: "1px solid #eee",
+        borderRadius: 10,
+        padding: 10
+      }}
+    >
+      <CapsuleCard capsule={c} />
+
+      <button
+        onClick={async () => {
+          if (!window.confirm("Delete this capsule permanently?")) return;
+
+          try {
+            const token = localStorage.getItem("token");
+
+            await fetch(`${import.meta.env.VITE_API_BASE_URL}/capsules/${c._id}`, {
+              method: "DELETE",
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            });
+
+            // Reload list after delete
+            loadCapsules();
+          } catch (err) {
+            console.error(err);
+            alert("Failed to delete capsule");
+          }
+        }}
+        style={{
+          marginTop: 10,
+          width: "100%",
+          background: "red",
+          color: "white",
+          padding: "8px 12px",
+          borderRadius: 6,
+          border: "none",
+          cursor: "pointer"
+        }}
+      >
+        Delete Capsule
+      </button>
+    </div>
+  ))}
+</div>
+
     </div>
   );
 }

@@ -1,6 +1,8 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException, Depends, Header
+from fastapi.responses import FileResponse
 from utils.token_utils import decode_access_token
 from models.capsule_model import add_attachments_to_capsule
+from models.journal_model import add_journal_attachments
 import os
 from datetime import datetime
 import uuid
@@ -8,6 +10,7 @@ import uuid
 upload_router = APIRouter()
 
 UPLOAD_DIR = "./uploads"
+
 
 def get_current_user(authorization: str = Header(None)):
     if not authorization:
@@ -20,6 +23,10 @@ def get_current_user(authorization: str = Header(None)):
     except:
         raise HTTPException(status_code=401, detail="Invalid token")
 
+
+# =======================
+# CAPSULE FILE UPLOAD
+# =======================
 @upload_router.post("/capsule/{capsule_id}/files")
 async def upload_capsule_files(
     capsule_id: str,
@@ -47,5 +54,73 @@ async def upload_capsule_files(
         })
 
     add_attachments_to_capsule(capsule_id, attachments)
-
     return {"success": True, "files": attachments}
+
+
+# =======================
+# JOURNAL FILE UPLOAD
+# =======================
+@upload_router.post("/journal/{entry_id}/files")
+async def upload_journal_files(
+    entry_id: str,
+    files: list[UploadFile] = File(...),
+    user_id: str = Depends(get_current_user)
+):
+    save_dir = os.path.join(UPLOAD_DIR, "journal", entry_id)
+    os.makedirs(save_dir, exist_ok=True)
+
+    attachments = []
+
+    for file in files:
+        ext = file.filename.split(".")[-1]
+        unique_name = f"{uuid.uuid4()}.{ext}"
+        file_path = os.path.join(save_dir, unique_name)
+
+        with open(file_path, "wb") as f:
+            f.write(await file.read())
+
+        attachments.append({
+            "filename": file.filename,
+            "stored_as": unique_name,
+            "url": f"/uploads/journal/{entry_id}/{unique_name}",
+            "uploaded_at": datetime.utcnow()
+        })
+
+    add_journal_attachments(entry_id, attachments)
+    return {"success": True, "files": attachments}
+
+
+# =======================
+# FORCE DOWNLOAD ENDPOINT
+# =======================
+@upload_router.get("/download/journal/{entry_id}/{stored_as}")
+async def download_journal_file(entry_id: str, stored_as: str):
+    path = f"./uploads/journal/{entry_id}/{stored_as}"
+
+    if not os.path.exists(path):
+        raise HTTPException(status_code=404, detail="File not found")
+
+    return FileResponse(
+        path,
+        media_type="application/octet-stream",
+        filename=stored_as,
+        headers={"Content-Disposition": f"attachment; filename={stored_as}"}
+    )
+
+
+# =======================
+# FORCE DOWNLOAD FOR CAPSULE FILES
+# =======================
+@upload_router.get("/download/capsule/{capsule_id}/{stored_as}")
+async def download_capsule_file(capsule_id: str, stored_as: str):
+    path = f"./uploads/capsules/{capsule_id}/{stored_as}"
+
+    if not os.path.exists(path):
+        raise HTTPException(status_code=404, detail="File not found")
+
+    return FileResponse(
+        path,
+        media_type="application/octet-stream",
+        filename=stored_as,
+        headers={"Content-Disposition": f"attachment; filename={stored_as}"}
+    )

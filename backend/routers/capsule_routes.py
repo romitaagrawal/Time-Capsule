@@ -4,6 +4,11 @@ from models.capsule_model import create_capsule, list_user_capsules, get_capsule
 from utils.token_utils import decode_access_token
 from datetime import datetime, timedelta
 from typing import Optional
+from bson import ObjectId
+from models.capsule_model import CAPS, get_capsule_by_id
+import os
+import shutil
+
 
 capsule_router = APIRouter()
 
@@ -84,3 +89,23 @@ def get_capsule(capsule_id: str, user_id: str = Depends(get_current_user)):
     c["created_at"] = (c["created_at"] + IST_OFFSET).isoformat()
 
     return {"locked": False, "capsule": c}
+
+@capsule_router.delete("/{capsule_id}")
+def delete_capsule(capsule_id: str, user_id: str = Depends(get_current_user)):
+    capsule = get_capsule_by_id(capsule_id)
+    if not capsule:
+        raise HTTPException(status_code=404, detail="Capsule not found")
+
+    if capsule["owner_id"] != user_id:
+        raise HTTPException(status_code=403, detail="Forbidden")
+
+    # Delete DB record
+    CAPS.delete_one({"_id": ObjectId(capsule_id)})
+
+    # Delete files from storage
+    folder = f"./uploads/capsules/{capsule_id}"
+    if os.path.exists(folder):
+        import shutil
+        shutil.rmtree(folder)
+
+    return {"success": True, "message": "Capsule deleted"}

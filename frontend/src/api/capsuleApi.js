@@ -38,3 +38,11 @@ export async function getCapsule(id) {
   });
   return res.data; // { locked: bool, open_date:..., capsule: {...} }
 }
+
+export async function deleteCapsule(id) {
+  const token = localStorage.getItem("token");
+  const res = await api.delete(`/capsules/${id}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return res.data;
+}
