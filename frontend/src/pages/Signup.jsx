@@ -19,7 +19,7 @@ export default function Signup() {
       localStorage.setItem("token", res.token);
       localStorage.setItem("name", name);
 
-      navigate("/create-capsule");
+      navigate("/");
     } catch (err) {
       setError(err?.response?.data?.detail || "Signup failed");
     }
