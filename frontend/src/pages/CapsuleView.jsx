@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getCapsule } from "../api/capsuleApi";
 import formatDate from "../utils/formatDate";
-import "../assets/css/capsule.css";
+// import "../assets/css/capsule.css";
 
 function FileCard({ file, capsuleId }) {
   const BASE = import.meta.env.VITE_API_BASE_URL;

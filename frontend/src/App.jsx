@@ -39,7 +39,7 @@ function App() {
     </ProtectedRoute>
   } />
       </Routes>
-      <Footer/>
+      {/* <Footer/> */}
     </>
   );
 }

@@ -1,4 +1,0 @@
-/* frontend/src/assets/css/capsule.css */
-img { display: block; }
-button { padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc; background: white; cursor: pointer; }
-button:disabled { opacity: 0.6; cursor: not-allowed; }
