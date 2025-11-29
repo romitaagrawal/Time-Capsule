@@ -1,0 +1,215 @@
+/* src/assets/css/theme.css */
+
+/* Slightly darker pastel than homepage */
+:root{
+  --bg: linear-gradient(135deg, #f6eefe 0%, #e9f4ff 50%, #fff6ea 100%);
+  --card: rgba(255,255,255,0.95);
+  --muted: #6b7280;
+  --primary: #7aa2ff;
+  --accent: #ffd6e0;
+  --pink: #f6cfe0;
+  --radius: 14px;
+  --max: 1200px;
+}
+
+/* Global layout */
+*{box-sizing:border-box}
+body,html,#root{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:#111;}
+body{background:var(--bg);}
+
+/* Fixed header */
+.tc-header-fixed{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  height:72px;
+  background: rgba(255,255,255,0.9);
+  box-shadow: 0 6px 18px rgba(16,24,40,0.06);
+  z-index:60;
+  backdrop-filter: blur(6px);
+}
+.tc-header-inner{
+  max-width:var(--max);
+  margin:0 auto;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 20px;
+}
+.tc-logo{
+  font-weight:700;
+  font-size:20px;
+  cursor:pointer;
+  color:#111;
+}
+.tc-header-nav{display:flex;align-items:center;}
+
+/* Buttons */
+.tc-btn{border:0;padding:8px 14px;border-radius:12px;cursor:pointer;font-weight:600; font-size:14px;}
+.tc-btn-primary{background:linear-gradient(90deg,var(--primary),#8ec2ff);color:white;box-shadow:0 8px 20px rgba(122,162,255,0.12);}
+.tc-btn-pink{background:linear-gradient(90deg,#ffd6e0,#ffc6df);color:#2b2b2b;}
+.tc-btn-ghost{background:white;border:1px solid rgba(17,24,39,0.08);color:#111;}
+.tc-btn-ghost-small{background:#f0f6ff;color:#2b2b2b;border-radius:8px;padding:6px 10px;}
+.tc-btn-muted-small{background:#f3f4f6;color:#999;border-radius:8px;padding:6px 10px;}
+.tc-btn-danger-full{background:#9b59b6;color:white;border-radius:8px;padding:10px 12px;width:100%;margin-top:12px;border:none;}
+
+/* page wrap (no large gutters) */
+.tc-page-wrap{
+  padding-top:92px; /* leave space for fixed header */
+  max-width:var(--max);
+  margin:0 auto;
+  width:100%;
+  padding-left:28px;
+  padding-right:28px;
+  padding-bottom:60px;
+}
+
+/* form panel */
+.tc-form-panel{
+  background:var(--card);
+  border-radius:14px;
+  padding:28px;
+  margin:26px 0;
+  box-shadow:0 12px 26px rgba(16,24,40,0.06);
+}
+.tc-page-title{margin:0 0 12px 0;font-size:28px}
+
+.tc-form-grid{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;}
+.tc-input{padding:12px;border-radius:10px;border:1px solid rgba(16,24,40,0.06);width:100%;}
+.tc-input-file{padding:10px}
+
+/* grid of cards */
+.tc-grid-section{margin-top:26px}
+.tc-grid-cards{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap:18px;
+  align-items:start;
+}
+
+/* small card */
+.tc-card-small{
+  background:white;padding:18px;border-radius:12px;box-shadow:0 8px 20px rgba(16,24,40,0.04);border:1px solid rgba(0,0,0,0.03);
+}
+.tc-card-title{margin:0 0 8px 0}
+.tc-card-meta{font-size:13px;color:var(--muted);line-height:1.4}
+.tc-card-bottom{display:flex;align-items:center;margin-top:12px}
+.tc-card-count{margin-left:auto;color:#888}
+
+/* attachments / gallery */
+.tc-attachments-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fill,minmax(220px,1fr));
+  gap:14px;
+}
+.tc-attachment-card{
+  display:flex;
+  gap:14px;
+  align-items:center;
+  background:var(--card);
+  border-radius:10px;
+  padding:10px;
+  box-shadow:0 8px 20px rgba(16,24,40,0.04);
+}
+.tc-file-thumb{width:120px;height:80px;object-fit:cover;border-radius:8px;border:1px solid rgba(0,0,0,0.04)}
+.tc-file-icon{display:flex;align-items:center;justify-content:center;font-weight:700;color:#666;background:#fff;padding:10px;border-radius:8px;width:120px;height:80px}
+.tc-attachment-info{flex:1;display:flex;flex-direction:column;gap:6px}
+.tc-attachment-name{font-weight:600}
+.tc-attachment-actions .tc-link{color:#2a5dd9;text-decoration:underline}
+
+/* capsule header on view page */
+.tc-capsule-header{background:var(--card);padding:20px;border-radius:12px;margin-top:18px;box-shadow:0 8px 20px rgba(16,24,40,0.04)}
+.tc-meta-row{display:flex;gap:20px;color:var(--muted);margin-top:10px}
+
+/* locked box */
+.tc-locked-box{background:#fff;padding:20px;border-radius:10px;box-shadow:0 8px 20px rgba(16,24,40,0.04);margin-top:14px}
+
+/* footer */
+.tc-footer-block{margin-top:40px;background:transparent;padding:40px 0}
+.tc-footer-inner{max-width:var(--max);margin:0 auto;text-align:center;color:var(--muted)}
+
+/* small util */
+.tc-muted{color:var(--muted)}
+
+/* responsive */
+@media (max-width:900px){
+  .tc-form-grid{grid-template-columns:1fr; align-items:stretch}
+  .tc-attachments-grid{grid-template-columns:repeat(2,1fr)}
+  .tc-header-inner{padding:0 14px}
+}
+@media (max-width:520px){
+  .tc-attachments-grid{grid-template-columns:1fr}
+}
+
+
+/* HEADER FIXED BAR */
+.tc-header {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  background: #dbe7ff; /* slightly darker pastel */
+  padding: 14px 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* Inner container: left logo + right buttons */
+.tc-header-inner {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 30px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* LOGO */
+.tc-logo {
+  font-size: 22px;
+  font-weight: 700;
+  color: #222;
+}
+
+/* RIGHT SIDE BUTTON WRAPPER */
+.tc-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* COMMON BUTTON STYLE */
+.tc-btn {
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: 0.2s ease;
+}
+
+/* INDIVIDUAL BUTTON COLORS */
+.tc-btn.create {
+  background: #8fb3ff;
+  color: white;
+}
+
+.tc-btn.journal {
+  background: #ffd4db;
+  color: #222;
+}
+
+.tc-btn.logout {
+  background: white;
+  border: 1px solid #bbb;
+  color: #333;
+}
+
+.tc-btn:hover {
+  opacity: 0.85;
+}

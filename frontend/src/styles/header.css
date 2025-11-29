@@ -1,0 +1,111 @@
+/* -------------------------------------------------------
+   HEADER LAYOUT (Darker pastel version)
+---------------------------------------------------------*/
+
+.tc-header {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+
+  background: #ced8f3; /* Slightly darker pastel than homepage */
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+
+  padding: 12px 0;
+}
+
+/* Make inner container stretch full width */
+.tc-header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+
+  padding: 0 32px;
+  display: flex;
+  /* align-items: center; */
+
+  /* MAIN FIX → pushes left & right apart */
+  justify-content: space-between;
+}
+
+/* -------------------------------------------------------
+   LEFT SIDE → LOGO
+---------------------------------------------------------*/
+.tc-logo {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1d1d1d;
+  letter-spacing: -0.5px;
+}
+
+/* -------------------------------------------------------
+   RIGHT SIDE → BUTTONS
+---------------------------------------------------------*/
+.tc-nav-right {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+
+  /* Ensures buttons stay on far-right */
+  margin-left: auto;
+}
+
+/* Button base style */
+.tc-btn {
+  padding: 8px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: 0.2s ease;
+  border: none;
+}
+.greet {
+  margin-right: 12px;
+  font-weight: 600;
+  color: #333;
+}
+
+.ghost {
+  background: #fff;
+}
+/* Primary button */
+.tc-btn.create {
+  background: #8faeff;
+  color: white;
+}
+
+/* Secondary button */
+.tc-btn.journal {
+  background: #ffd4df;
+  color: #333;
+}
+
+/* Logout button */
+.tc-btn.logout {
+  background: #ffffff;
+  border: 1px solid #ddd;
+  color: #444;
+}
+
+.tc-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+/* -------------------------------------------------------
+   RESPONSIVE
+---------------------------------------------------------*/
+@media (max-width: 768px) {
+  .tc-header-inner {
+    padding: 0 16px;
+  }
+
+  .tc-nav-right {
+    gap: 10px;
+  }
+
+  .tc-btn {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+}

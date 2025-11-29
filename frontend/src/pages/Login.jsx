@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../api/authApi";
+import "../styles/login.css";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -15,57 +16,65 @@ export default function Login() {
     try {
       const res = await login(email, password);
 
-      // Store token and name
       localStorage.setItem("token", res.token);
       localStorage.setItem("name", res.name);
 
       navigate("/");
     } catch (err) {
-      console.log(err);
-
-      // FIX: Convert backend error into readable text
       if (err.response?.data?.detail) {
-        if (typeof err.response.data.detail === "string") {
-          setError(err.response.data.detail);
-        } else if (Array.isArray(err.response.data.detail)) {
-          setError(err.response.data.detail[0].msg);
-        } else {
-          setError("Login failed");
-        }
-      } else {
-        setError("Login failed");
-      }
+        const d = err.response.data.detail;
+        setError(typeof d === "string" ? d : d[0]?.msg || "Login failed");
+      } else setError("Login failed");
     }
   }
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        /><br /><br />
+    <div className="auth-page">
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        /><br /><br />
+      {/* HEADER */}
+      <header className="auth-header">
+        <div className="auth-logo" onClick={() => navigate("/")}>
+          TimeCapsule
+        </div>
+      </header>
 
-        <button type="submit">Login</button>
-      </form>
+      {/* LOGIN BOX */}
+      <div className="auth-box">
+        <h2>Login</h2>
 
-      {error && (
-        <p style={{ color: "red", marginTop: "10px" }}>
-          {error}
+        <form onSubmit={handleSubmit}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+
+          <button type="submit">Login</button>
+        </form>
+
+        {error && <p className="auth-error">{error}</p>}
+
+        <p className="auth-switch">
+          New here?{" "}
+          <span onClick={() => navigate("/signup")}>Create an account</span>
         </p>
-      )}
+      </div>
+
+      {/* FOOTER */}
+      <footer className="auth-footer">
+        © {new Date().getFullYear()} TimeCapsule — Made with care.
+      </footer>
+
     </div>
   );
 }

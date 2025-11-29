@@ -1,76 +1,65 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import scrollToSection from "../utils/scrollToSection";
+import { useNavigate } from "react-router-dom";
+import "../styles/header.css";   // ← NEW FILE
 
 export default function Header() {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
-  const name = localStorage.getItem("name");
 
-  const logout = () => {
+  const handleNav = (path) => {
+    const token = localStorage.getItem("token");
+    if (!token) return navigate("/login");
+    navigate(path);
+  };
+
+  const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("name");
-    navigate("/");
-  };
-
-  // Conditional navigation based on authentication
-  const handleJournalClick = () => {
-    if (token) {
-      navigate("/journal");
-    } else {
-      navigate("/login");
-    }
-  };
-
-  const handleCapsuleClick = () => {
-    if (token) {
-      navigate("/create-capsule");
-    } else {
-      navigate("/login");
-    }
+    navigate("/login");
   };
 
   return (
-    <header
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        padding: "1rem",
-        background: "#fafafa",
-        borderBottom: "1px solid #eee",
-      }}
-    >
-      <div>
-        <Link to="/" style={{ fontSize: "1.3rem", fontWeight: "bold" }}>
+    <header className="tc-header">
+      <div className="tc-header-inner">
+
+        {/* LEFT: LOGO */}
+        <div
+          className="tc-logo"
+          onClick={() => navigate("/")}
+          style={{ cursor: "pointer" }}
+        >
           TimeCapsule
-        </Link>
+        </div>
+
+        {/* RIGHT: BUTTONS */}
+        <div className="tc-nav-right">
+          <button className="tc-btn create" onClick={() => handleNav("/create-capsule")}>
+            Create Capsule
+          </button>
+
+          <button className="tc-btn journal" onClick={() => handleNav("/journal")}>
+            Journal
+          </button>
+
+          <span className="greet">
+            Hello, {localStorage.getItem("name") || "User"}
+          </span>
+
+          {/* <button className="tc-btn logout" onClick={handleLogout}>
+            Logout
+          </button> */}
+          <button
+            className="tc-btn logout"
+            onClick={() => {
+              localStorage.removeItem("token");
+              localStorage.removeItem("name");
+              window.location.href = "/"; // reload to homepage
+            }}
+          >
+            Logout
+          </button>
+        </div>
+
       </div>
-
-      <nav style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
-        {/* Scroll buttons */}
-        <button onClick={() => scrollToSection("about")} className="nav-btn">
-          About
-        </button>
-        <button onClick={() => scrollToSection("what")} className="nav-btn">
-          Time Capsule?
-        </button>
-        <button onClick={handleJournalClick} className="nav-btn">
-          Journal
-        </button>
-
-        {/* Auth buttons */}
-        {!token ? (
-          <>
-            <Link to="/login">Login</Link>
-            <Link to="/signup">Signup</Link>
-          </>
-        ) : (
-          <>
-            <span>Hello, {name}</span>
-            <button onClick={logout}>Logout</button>
-          </>
-        )}
-      </nav>
     </header>
   );
 }

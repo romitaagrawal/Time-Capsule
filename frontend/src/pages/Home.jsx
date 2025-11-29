@@ -1,341 +1,200 @@
-// import React, { useEffect, useRef } from "react";
-// import Header from "../components/Header"; // make sure Header.jsx/tsx is in the same folder or adjust the path
-// import { useNavigate } from "react-router-dom";
-// import "../styles/Home.css";
-
-// // Small, dependency-free inline SVG icons
-// const IconTime = () => (
-//   <svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden>
-//     <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.4" />
-//     <path d="M12 7v6l4 2" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-//   </svg>
-// );
-// const IconLock = () => (
-//   <svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden>
-//     <rect x="4" y="11" width="16" height="9" rx="2" stroke="currentColor" strokeWidth="1.4" />
-//     <path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-//   </svg>
-// );
-// const IconJournal = () => (
-//   <svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden>
-//     <path d="M6 3h9a2 2 0 0 1 2 2v14" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-//     <path d="M6 7h10" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-//   </svg>
-// );
-
-// export default function Home() {
-//   const navigate = useNavigate();
-//   const token = localStorage.getItem("token");
-//   const containerRef = useRef(null);
-
-//   useEffect(() => {
-//     const el = containerRef.current;
-//     if (!el) return;
-//     const obs = new IntersectionObserver(
-//       (entries) => {
-//         entries.forEach((entry) => {
-//           if (entry.isIntersecting) entry.target.classList.add("in-view");
-//         });
-//       },
-//       { threshold: 0.12 }
-//     );
-
-//     el.querySelectorAll(".tc-reveal").forEach((child) => obs.observe(child));
-//     return () => obs.disconnect();
-//   }, []);
-
-//   const goToCapsule = () => {
-//     if (token) navigate("/create-capsule");
-//     else navigate("/login");
-//   };
-
-//   const goToJournal = () => {
-//     if (token) navigate("/journal");
-//     else navigate("/login");
-//   };
-
-//   return (
-//     <main className="tc-root" ref={containerRef}>
-//       {/* Header component (keeps the same UI/UX as your provided Header) */}
-//       <Header />
-
-//       <section className="tc-hero">
-//         <div className="tc-hero-card tc-reveal">
-//           <h2 className="tc-hero-title">Preserve moments. Surprise future you.</h2>
-//           <p className="tc-hero-desc">
-//             Create private time capsules with photos, videos, and files. Lock them
-//             until a future date and relive the memory when the time comes.
-//           </p>
-
-//           <div className="tc-hero-actions">
-//             <button className="tc-primary" onClick={goToCapsule} type="button">
-//               Create Capsule
-//             </button>
-//             <button className="tc-outline" onClick={goToJournal} type="button">
-//               Start Journaling
-//             </button>
-//           </div>
-//         </div>
-
-//         <div className="tc-visual tc-reveal" aria-hidden>
-//           <div className="tc-blob" />
-//         </div>
-//       </section>
-
-//       <section id="about" className="tc-section">
-//         <div className="tc-card tc-reveal">
-//           <h3>About</h3>
-//           <p>
-//             TimeCapsule is a thoughtful, secure place to collect and preserve the
-//             moments that matter. Think of it as a digital heirloom — a private
-//             collection of your thoughts, photos, videos, documents, and messages
-//             that you intentionally save for a future date.
-//           </p>
-
-//           <p>
-//             You can use it to mark life milestones (graduations, weddings,
-//             birthdays), track personal growth (letters to your future self), or
-//             record simple everyday memories that might otherwise fade. Each
-//             capsule can contain multiple items, metadata (titles, tags), and a
-//             message explaining why the moment is important to you.
-//           </p>
-
-//           <p>
-//             Security and privacy are central: capsules remain locked until the
-//             unlock date you choose, and access is limited to your account. You
-//             control who sees what, and when.
-//           </p>
-
-//           <p>
-//             Many users create capsules as gifts, therapeutic exercises, time
-//             capsules for children, or as a way to remember the small but
-//             meaningful details of everyday life.
-//           </p>
-//         </div>
-//       </section>
-
-//       <section id="what" className="tc-section">
-//         <div className="tc-card tc-reveal">
-//           <h3>What is a Time Capsule?</h3>
-//           <p>
-//             A Time Capsule is a digital container for memories that you choose to
-//             lock away until a specific date. Unlike a standard photo album or
-//             notes app, a time capsule is purpose-built to preserve context and
-//             surprise — it helps frame memories with the intent of rediscovery.
-//           </p>
-
-//           <p>
-//             Capsules can store mixed media (text, images, audio, video, and
-//             documents). You can add an explanatory note describing the moment,
-//             tag other items for easy searching later, and select a release date
-//             that turns your present into a future surprise.
-//           </p>
-
-//           <p>
-//             Typical uses:
-//             <ul>
-//               <li>Birthday / anniversary surprises</li>
-//               <li>Letters to your future self (5, 10, 20 years later)</li>
-//               <li>Memory boxes for travel, relationships, and projects</li>
-//               <li>Family heirloom capsules for children</li>
-//             </ul>
-//           </p>
-
-//           <div className="tc-actions-row tc-reveal">
-//             <button className="tc-primary" onClick={goToCapsule} type="button">
-//               Build a Capsule
-//             </button>
-//             <button className="tc-outline" onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })} type="button">
-//               Learn More
-//             </button>
-//           </div>
-//         </div>
-//       </section>
-
-//       <section className="tc-how tc-section tc-reveal">
-//         <div className="tc-card">
-//           <h3>How it works — 3 simple steps</h3>
-//           <div className="tc-steps">
-//             <div className="tc-step tc-reveal">
-//               <div className="tc-step-icon">
-//                 <IconTime />
-//               </div>
-//               <h4>1. Create</h4>
-//               <p>Write an entry, upload photos/videos, or attach files to a capsule.</p>
-//             </div>
-
-//             <div className="tc-step tc-reveal">
-//               <div className="tc-step-icon">
-//                 <IconLock />
-//               </div>
-//               <h4>2. Lock</h4>
-//               <p>Pick an unlock date. Your capsule stays sealed and private until then.</p>
-//             </div>
-
-//             <div className="tc-step tc-reveal">
-//               <div className="tc-step-icon">
-//                 <IconJournal />
-//               </div>
-//               <h4>3. Reopen</h4>
-//               <p>When the date arrives, you’ll receive the surprise — the memories come alive.</p>
-//             </div>
-//           </div>
-//         </div>
-//       </section>
-
-//       <section id="journal" className="tc-section tc-section-soft tc-reveal">
-//         <div className="tc-card">
-//           <h3>Start Journaling</h3>
-//           <p>
-//             Journaling inside TimeCapsule is private by design. Use it to write
-//             daily reflections, log important events, or create long-form
-//             narratives about your life. Each journal entry can be saved as a
-//             standalone item or grouped into a capsule to be opened later.
-//           </p>
-
-//           <p>
-//             Features include rich text formatting, attachments (images, files),
-//             and optional locking of specific entries until a date you set. This
-//             makes journaling both a reflective practice and a way to build
-//             meaningful surprises for your future self.
-//           </p>
-
-//           <p>
-//             Whether you're processing emotions, tracking goals, or keeping a
-//             gratitude log, the journal provides a secure, private space to
-//             explore your thoughts and then rediscover them when time gives you
-//             new perspective.
-//           </p>
-
-//           <div className="tc-actions-row">
-//             <button className="tc-primary" onClick={goToJournal} type="button">
-//               Start Writing
-//             </button>
-//             <button className="tc-outline" onClick={() => navigate("/features")} type="button">
-//               Features
-//             </button>
-//           </div>
-//         </div>
-//       </section>
-
-//       <footer className="tc-footer tc-reveal">
-//         <small>© {new Date().getFullYear()} TimeCapsule — Made with care.</small>
-//       </footer>
-//     </main>
-//   );
-// }
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/Home.css";
+import "../styles/home.css"; // IMPORTANT: file must exist
 
 export default function Home() {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
-  const pageRef = useRef(null);
 
-  const goToCapsule = () => (token ? navigate("/create-capsule") : navigate("/login"));
-  const goToJournalPage = () => (token ? navigate("/journal") : navigate("/login"));
+  const scrollTo = (id) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
-    const el = pageRef.current;
-    const revealEls = el.querySelectorAll(".fade-in");
-
-    const obs = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => entry.isIntersecting && entry.target.classList.add("visible"));
+    const reveals = document.querySelectorAll(".reveal");
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) e.target.classList.add("visible");
+        });
       },
-      { threshold: 0.1 }
+      { threshold: 0.12 }
     );
-
-    revealEls.forEach(el => obs.observe(el));
-    return () => obs.disconnect();
+    reveals.forEach((r) => io.observe(r));
+    return () => io.disconnect();
   }, []);
 
   return (
-    <div className="home-page" ref={pageRef}>
+    <div className="home-root">
 
       {/* HEADER */}
       <header className="home-header">
-        <div className="logo">TimeCapsule</div>
+  <div 
+    className="brand" 
+    onClick={() => scrollTo("top")} 
+    style={{ cursor: "pointer" }}
+  >
+    TimeCapsule
+  </div>
 
-        <nav className="nav-links">
-          <a href="#about">About</a>
-          <a href="#what">Time Capsule?</a>
-          <a href="#journal">Journal</a>
-        </nav>
+  <nav className="nav">
+    <button onClick={() => scrollTo("about")}>About</button>
+    <button onClick={() => scrollTo("capsuleInfo")}>Time Capsule?</button>
+    <button onClick={() => scrollTo("journalInfo")}>Journal</button>
 
-        <div className="auth-buttons">
-          <button onClick={() => navigate("/login")}>Login</button>
-          <button className="signup-btn" onClick={() => navigate("/signup")}>Signup</button>
-        </div>
-      </header>
+    <div className="auth">
+      {/* CHECK LOGIN STATUS */}
+      {localStorage.getItem("token") ? (
+        <>
+          <span className="greet">
+            Hello, {localStorage.getItem("name") || "User"}
+          </span>
 
-      {/* HERO */}
-      <div id="hero" className="hero fade-in">
-        <div className="hero-card">
+          <button
+            className="ghost"
+            onClick={() => {
+              localStorage.removeItem("token");
+              localStorage.removeItem("name");
+              window.location.href = "/"; // reload to homepage
+            }}
+          >
+            Logout
+          </button>
+        </>
+      ) : (
+        <>
+          <button
+            className="ghost"
+            onClick={() => navigate("/login")}
+          >
+            Login
+          </button>
+
+          {/* Signup stays disabled/commented as you wanted */}
+        </>
+      )}
+    </div>
+  </nav>
+</header>
+
+
+      {/* HERO SECTION */}
+      <section id="top" className="block hero-block reveal">
+        <div className="hero-text">
           <h1>Preserve moments. Surprise future you.</h1>
+
           <p>
-            Time has a quiet way of slipping through our fingers. Your memories shouldn’t.
-            Create personal capsules filled with photos, videos, letters, files, and thoughts —
-            locked safely until the future moment you choose to revisit them.
+            TimeCapsule helps you freeze your happiest moments — birthdays, 
+            trips, childhood memories, friendships, milestones — and reopen 
+            them years later as the most emotional surprise of your life.
+          </p>
+        </div>
+
+        <div className="collage collage-hero">
+          <img src="/src/assets/images/collage1.jpeg" />
+          <img src="/src/assets/images/collage2.jpeg" />
+          <img src="/src/assets/images/collage3.jpeg" />
+          <img src="/src/assets/images/collage4.jpeg" />
+          <img src="/src/assets/images/collage5.jpeg" />
+        </div>
+      </section>
+
+      {/* ABOUT SECTION */}
+      <section id="about" className="block block-alt reveal">
+        <div className="content">
+          <h2>About</h2>
+
+          <p>
+            TimeCapsule is a gentle, memory-preserving space. 
+            It captures your emotions, photos, videos, and little life snapshots, 
+            storing them safely until the unlock date you choose. 
           </p>
 
-          <div className="hero-buttons">
-            <button className="primary-btn" onClick={goToCapsule}>Create Capsule</button>
-            <button className="outline-btn" onClick={goToJournalPage}>Start Journaling</button>
-          </div>
+          <p>
+            It's more than an app — it’s a gift from your past self. 
+            A future moment of joy waiting to be unwrapped.
+          </p>
         </div>
-      </div>
 
-      {/* CONTENT */}
-      <div className="content-wrapper fade-in">
+        <div className="collage collage-left">
+          <img src="/src/assets/images/collage3.jpeg" />
+          <img src="/src/assets/images/collage5.jpeg" />
+          <img src="/src/assets/images/collage1.jpeg" />
+        </div>
+      </section>
 
-        {/* ABOUT */}
-        <h2 id="about">About</h2>
-        <p>
-          TimeCapsule is built for people who want to preserve life not just through photos,
-          but through intention. It acts as a digital heirloom — a protected space where you store
-          your milestones, emotions, thoughts, letters, artworks, and fragments of everyday life
-          that deserve to be remembered.
-        </p>
-        <p>
-          Whether it's documenting your relationship journey, creating a future message for yourself,
-          saving a moment for someone special, or simply capturing who you were at a certain time…
-          TimeCapsule keeps your story safe until the moment you choose to open it again.
-        </p>
+      {/* WHAT IS A TIME CAPSULE */}
+      <section id="capsuleInfo" className="block reveal">
+        <div className="content">
+          <h2>What is a Time Capsule?</h2>
 
-        {/* WHAT IS A CAPSULE */}
-        <h2 id="what">What is a Time Capsule?</h2>
-        <p>
-          A digital Time Capsule lets you gather memories and seal them for the future. Instead of a physical
-          box buried underground, this is your emotional archive — stored securely, organized beautifully,
-          and designed to be rediscovered.
-        </p>
-        <p>
-          You can add mixed media: images, letters, audio messages, videos, PDFs, playlists, journal reflections —
-          each preserved with the exact emotion and context from the day you created it.
-        </p>
+          <p>
+            A digital capsule is a sealed package of your stories, media, 
+            letters, and files — locked until a date you choose. 
+            Unlike normal albums, capsules preserve feelings with purpose.
+          </p>
 
-        {/* JOURNALING SECTION */}
-        <h2 id="journal">Journaling</h2>
-        <p>
-          Journaling inside TimeCapsule is designed to feel like a quiet space meant only for you.
-          Write reflections, track growth, process feelings, or capture fleeting thoughts you don’t want to lose.
-        </p>
-        <p>
-          Every entry can stand alone or be added to a capsule later. You can even lock certain journal entries
-          until a chosen date — turning your private writing into a future gift for yourself.
-        </p>
+          <p>
+            When the date arrives, everything unlocks together, giving 
+            you a moment powerful enough to bring you to tears.
+          </p>
+          <h2>Create your first capsule</h2>
+        <p>Seal today’s moments for a future version of yourself.</p>
 
-        <div className="journal-action">
-          <button className="primary-btn" onClick={goToJournalPage}>
-            Start Writing Today
+        <button className="primary big" onClick={() => navigate("/create-capsule")}>
+          Create Capsule
+        </button>
+
+        </div>
+
+        <div className="collage collage-right">
+          <img src="/src/assets/images/collage2.jpeg" />
+          <img src="/src/assets/images/collage4.jpeg" />
+          <img src="/src/assets/images/collage1.jpeg" />
+        </div>
+      </section>
+
+      {/* CREATE CAPSULE CTA
+      <section className="cta-block reveal">
+        <h2>Create your first capsule</h2>
+        <p>Seal today’s moments for a future version of yourself.</p>
+
+        <button className="primary big" onClick={() => navigate("/create-capsule")}>
+          Create Capsule
+        </button>
+      </section> */}
+
+      {/* JOURNAL SECTION */}
+      <section id="journalInfo" className="block block-alt reveal">
+        <div className="content">
+          <h2>Journaling</h2>
+
+          <p>
+            Your journal is your emotional timeline — a safe space to write 
+            honestly, privately, and freely. Each entry becomes a snapshot 
+            of who you were in that moment.
+          </p>
+
+          <p>
+            And someday, you’ll read it again... and remember how far you've come.
+          </p>
+
+          <button className="primary big" onClick={() => navigate("/journal")}>
+            Start Journaling
           </button>
         </div>
 
-      </div>
+        <div className="collage collage-left">
+          <img src="/src/assets/images/collage5.jpeg" />
+          <img src="/src/assets/images/collage2.jpeg" />
+          <img src="/src/assets/images/collage5.jpeg" />
 
-      <footer className="footer">© {new Date().getFullYear()} TimeCapsule</footer>
+        </div>
+      </section>
+
+      <footer className="footer">
+        © {new Date().getFullYear()} TimeCapsule — Made with love.
+      </footer>
     </div>
   );
 }
