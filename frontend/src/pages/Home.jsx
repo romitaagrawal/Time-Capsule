@@ -101,6 +101,13 @@ export default function Home() {
 
       {/* ABOUT SECTION */}
       <section id="about" className="block block-alt reveal">
+
+        <div className="collage collage-left">
+          <img src="/src/assets/images/collage6.jpeg" />
+          <img src="/src/assets/images/collage7.jpeg" />
+          <img src="/src/assets/images/collage8.jpeg" />
+        </div>
+        
         <div className="content">
           <h2>About</h2>
 
@@ -116,11 +123,11 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="collage collage-left">
+        {/* <div className="collage collage-left">
           <img src="/src/assets/images/collage3.jpeg" />
           <img src="/src/assets/images/collage5.jpeg" />
           <img src="/src/assets/images/collage1.jpeg" />
-        </div>
+        </div> */}
       </section>
 
       {/* WHAT IS A TIME CAPSULE */}
@@ -148,9 +155,9 @@ export default function Home() {
         </div>
 
         <div className="collage collage-right">
-          <img src="/src/assets/images/collage2.jpeg" />
-          <img src="/src/assets/images/collage4.jpeg" />
-          <img src="/src/assets/images/collage1.jpeg" />
+          <img src="/src/assets/images/collage9.jpeg" />
+          <img src="/src/assets/images/collage10.jpeg" />
+          <img src="/src/assets/images/collage11.jpeg" />
         </div>
       </section>
 
@@ -166,6 +173,14 @@ export default function Home() {
 
       {/* JOURNAL SECTION */}
       <section id="journalInfo" className="block block-alt reveal">
+
+        <div className="collage collage-left">
+          <img src="/src/assets/images/collage1.jpeg" />
+          <img src="/src/assets/images/collage2.jpeg" />
+          <img src="/src/assets/images/collage3.jpeg" />
+
+        </div>
+
         <div className="content">
           <h2>Journaling</h2>
 
@@ -184,12 +199,12 @@ export default function Home() {
           </button>
         </div>
 
-        <div className="collage collage-left">
+        {/* <div className="collage collage-left">
           <img src="/src/assets/images/collage5.jpeg" />
           <img src="/src/assets/images/collage2.jpeg" />
           <img src="/src/assets/images/collage5.jpeg" />
 
-        </div>
+        </div> */}
       </section>
 
       <footer className="footer">
