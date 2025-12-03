@@ -53,7 +53,3 @@ AI-based mood analysis for journal entries
 Custom capsule themes
 Shareable capsule links
 
-✨ Author
-Romita Agarwal
-🚀 B.Tech Full Stack Developer | UPES, Dehradun
-📌 Frontend & Backend Developer
